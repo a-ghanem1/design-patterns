@@ -1,16 +1,26 @@
-﻿using DesignPatterns.Observer;
+﻿using DesignPatterns.Momento;
 
-var onlineMarketplace = new OnlineMarketplace();
+var editor  = new TextEditor();
+var history = new TextEditorHistory(); 
 
-var khaled = new Customer("Khaled");
-var youssef = new Customer("Youssef");
-var zyad = new Customer("Zyad");
+editor.Content = "Hello";
+history.Save(editor.Save());
 
-onlineMarketplace.Subscribe(EventType.NEW_PRODUCT, khaled);
-onlineMarketplace.Subscribe(EventType.NEW_OFFER, khaled);
-onlineMarketplace.Subscribe(EventType.NEW_PRODUCT, youssef);
-onlineMarketplace.Subscribe(EventType.NEW_OFFER, zyad);
+editor.Content = "world";
+history.Save(editor.Save());
 
-onlineMarketplace.AddProduct(new Product("Mobile", 1000));
+editor.Content = "Momento";
+history.Save(editor.Save());
 
-onlineMarketplace.AddOffer(new Offer("new offer with 20% off for all items!"));
+editor.Restore(history.Undo());
+Console.WriteLine(editor.Content);
+
+editor.Restore(history.Undo());
+Console.WriteLine(editor.Content);
+
+editor.Restore(history.Undo());
+Console.WriteLine(editor.Content);
+
+
+editor.Restore(history.Redo());
+Console.WriteLine(editor.Content);
